@@ -2,7 +2,7 @@
 
 A Minecraft Bedrock client mod that fixes first-level command preview and Tab completion when cheats are disabled in the world.
 
-一个用于《我的世界》基岩版客户端模组，解决在世界未开启作弊状态下一级指令无法进行预览以及无法按 Tab 键自动补全的问题。
+一个用于《我的世界》基岩版客户端模组，解决在世界未开启作弊状态下一级指令无法按 Tab 键自动补全的问题。
 
 ## Features / 功能特性
 
