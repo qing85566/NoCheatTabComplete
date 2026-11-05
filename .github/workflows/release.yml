@@ -53,7 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           pattern: ${{ github.event.repository.name }}-${{ github.sha }}-*-windows-x64
           path: ./artifacts/
