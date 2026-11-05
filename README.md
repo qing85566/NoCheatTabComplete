@@ -21,4 +21,4 @@ xmake
 
 ## License
 
-MIT © [qing85566](https://github.com/qing85566)
+[LICENSE](https://github.com/qing85566/NoCheatTabComplete/blob/main/LICENSE)
