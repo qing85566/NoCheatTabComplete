@@ -120,10 +120,10 @@ std::vector<std::string> getFirstLevelCandidates(
 }
 
 bool doFirstLevelTabComplete(
-    IntellisenseHandler&                         handler,
-    std::weak_ptr<ClientInstanceScreenModel>     minecraftScreenModel,
-    std::string&                                 currentMessage,
-    int                                          index
+    IntellisenseHandler&                                    handler,
+    [[maybe_unused]] std::weak_ptr<ClientInstanceScreenModel> minecraftScreenModel,
+    std::string&                                            currentMessage,
+    int                                                     index
 ) {
     // Only execute command Tab completion if the message starts with '/'
     if (!currentMessage.starts_with('/')) {
@@ -170,9 +170,7 @@ bool doFirstLevelTabComplete(
     std::string completed = "/" + sCandidates[nextIdx];
     currentMessage        = completed;
 
-    if (auto model = minecraftScreenModel.lock()) {
-        model->setTextBoxBackend(completed);
-    }
+    // currentMessage passed by reference already updates the text box in ChatScreen
 
     handler.mLastTabCompleteIndex   = nextIdx;
     handler.mLastTabCompleteMessage = completed;
@@ -226,21 +224,6 @@ LL_AUTO_TYPE_INSTANCE_HOOK(
 ) {
     fixSignatures(const_cast<CommandRegistry&>(static_cast<CommandRegistry const&>(*this)));
     origin(partialMatch, cmdOrigin, info);
-}
-
-// Hook canCommandBeUsed on client to ensure intellisense previews are NEVER hidden
-LL_AUTO_TYPE_INSTANCE_HOOK(
-    CommandRegistryCanCommandBeUsedHook,
-    ll::memory::HookPriority::Normal,
-    CommandRegistry,
-    &CommandRegistry::canCommandBeUsed,
-    bool,
-    [[maybe_unused]] ::std::string const&            commandLine,
-    [[maybe_unused]] ::CommandPermissionLevel const& permissionLevel,
-    [[maybe_unused]] bool                            cheatsEnabled,
-    [[maybe_unused]] bool                            isEditorWorld
-) {
-    return true;
 }
 
 // Hook _updateAutoCompleteMessages on client to ensure candidates are not stripped when cheats are disabled
