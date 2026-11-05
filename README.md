@@ -1,29 +1,24 @@
-# LeviLamina Mod Template
+# NoCheatTabComplete
 
-> [!WARNING]
-> Remember to change the [LICENSE](LICENSE) file when you use this template
+A Minecraft Bedrock client mod that fixes first-level command preview and Tab completion when cheats are disabled in the world.
 
-Mod Template for LeviLamina
+一个用于《我的世界》基岩版客户端模组，解决在世界未开启作弊状态下一级指令无法进行预览以及无法按 Tab 键自动补全的问题。
 
-## Usage
+## Features / 功能特性
 
-For detailed instructions, see the [LeviLamina Documentation](https://docs.levimc.org/LeviLamina/developer_guides/tutorials/create_your_first_mod/)
+- **无作弊补全**：在单人本地世界或远程服务器未开启作弊（`allow-cheats=false`）时，输入 `/` 仍可正常显示指令智能补全（Intellisense）候选列表并带有本地化描述。
+- **Tab 键轮换**：支持按 Tab 键在所有匹配指令候选之间循环补全。
+- **纯客户端生效**：仅需客户端安装本模组，无需依赖服务端。
 
-1. Generate a new repository from this template
-2. Clone the new repository
-3. Change the mod name and the expected LeviLamina version in `xmake.lua`
-4. Add your code.
-5. Run `xmake f -y -p windows -a x64 -m release` in the root of the repository
-6. Run `xmake` to build the mod.
+## Build / 构建
 
-After a successful build, you will find mod in `bin/`
+```bash
+xmake f -m release -p windows -a x64 -y
+xmake
+```
 
-## Contributing
-
-Ask questions by creating an issue.
-
-PRs accepted.
+构建生成的模组文件将输出到 `bin/NoCheatTabComplete/` 目录。
 
 ## License
 
-CC0-1.0 © LeviMC(LiteLDev)
+MIT © [qing85566](https://github.com/qing85566)

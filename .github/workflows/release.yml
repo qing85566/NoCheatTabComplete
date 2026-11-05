@@ -9,7 +9,6 @@ jobs:
     strategy:
       matrix:
         target_type:
-          - server
           - client
     steps:
       - uses: actions/checkout@v7
@@ -42,53 +41,40 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: ${{ github.event.repository.name }}-${{ github.sha }}-${{ matrix.target_type }}-windows-x64
+          name: ${{ github.event.repository.name }}-${{ github.sha }}-client-windows-x64
           path: |
-            bin/
+            bin/NoCheatTabComplete/
 
   update-release-notes:
     permissions:
       contents: write
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: actions/checkout@v7
 
-      - id: extract-release-notes
-        uses: ffurrer2/extract-release-notes@v3
-
-      - uses: softprops/action-gh-release@v3
+      - uses: actions/download-artifact@v7
         with:
-          body: |
-            ${{ steps.extract-release-notes.outputs.release_notes }}
+          pattern: ${{ github.event.repository.name }}-${{ github.sha }}-*-windows-x64
+          path: ./artifacts/
+          merge-multiple: true
 
-  upload-to-release:
-    needs:
-      - build
-      - update-release-notes
-    permissions:
-      contents: write
-    strategy:
-      matrix:
-        target_type:
-          - server
-          - client
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
+      - name: Package artifacts
+        shell: bash
+        run: |
+          mkdir -p ./release-assets
+          for dir in ./artifacts/*; do
+            if [ -d "$dir" ]; then
+              base_name=$(basename "$dir")
+              zip_name="${base_name}.zip"
+              (cd "$dir" && zip -r "../../release-assets/${zip_name}" .)
+              echo "Created release-assets/${zip_name}"
+            fi
+          done
 
-      - uses: actions/download-artifact@v8
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
         with:
-          name: ${{ github.event.repository.name }}-${{ github.sha }}-${{ matrix.target_type }}-windows-x64
-          path: artifact
-
-      - run: |
-          cp CHANGELOG.md LICENSE README.md artifact/
-
-      - run: |
-          zip -r ../${{ github.event.repository.name }}-${{ matrix.target_type }}-windows-x64.zip *
-        working-directory: artifact
-
-      - uses: softprops/action-gh-release@v3
-        with:
-          files: |
-            ${{ github.event.repository.name }}-${{ matrix.target_type }}-windows-x64.zip
+          files: ./release-assets/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
