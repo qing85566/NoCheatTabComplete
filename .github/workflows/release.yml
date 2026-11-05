@@ -57,20 +57,28 @@ jobs:
         with:
           pattern: ${{ github.event.repository.name }}-${{ github.sha }}-*-windows-x64
           path: ./artifacts/
-          merge-multiple: true
 
       - name: Package artifacts
         shell: bash
         run: |
           mkdir -p ./release-assets
+          tag="${GITHUB_REF_NAME:-latest}"
+          # Package each artifact directory if downloaded into subdirectories
           for dir in ./artifacts/*; do
             if [ -d "$dir" ]; then
               base_name=$(basename "$dir")
-              zip_name="${base_name}.zip"
-              (cd "$dir" && zip -r "../../release-assets/${zip_name}" .)
-              echo "Created release-assets/${zip_name}"
+              # Replace commit SHA with tag name for cleaner release asset names
+              zip_name=$(echo "$base_name" | sed "s/${GITHUB_SHA}/${tag}/")
+              (cd "$dir" && zip -r "../../release-assets/${zip_name}.zip" .)
+              echo "Created release-assets/${zip_name}.zip"
             fi
           done
+          # Fallback if files were downloaded directly into ./artifacts/
+          if [ -f "./artifacts/manifest.json" ]; then
+            zip_name="${GITHUB_REPOSITORY#*/}-${tag}-client-windows-x64.zip"
+            (cd ./artifacts && zip -r "../release-assets/${zip_name}" .)
+            echo "Created release-assets/${zip_name}"
+          fi
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
