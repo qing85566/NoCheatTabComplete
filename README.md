@@ -6,8 +6,7 @@ A Minecraft Bedrock client mod that fixes first-level command Tab completion whe
 
 ## Features / 功能特性
 
-- **无作弊补全**：在单人本地世界或远程服务器未开启作弊（`allow-cheats=false`）时，输入 `/` 仍可正常显示指令智能补全（Intellisense）候选列表并带有本地化描述。
-- **Tab 键轮换**：支持按 Tab 键在所有匹配指令候选之间循环补全。
+- **无作弊补全**：在单人本地世界或远程服务器未开启作弊（`allow-cheats=false`）时，支持按 Tab 键在所有匹配指令候选之间循环补全。
 - **纯客户端生效**：仅需客户端安装本模组，无需依赖服务端。
 
 ## Build / 构建
