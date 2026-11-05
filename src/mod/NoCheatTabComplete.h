@@ -24,6 +24,7 @@ public:
 private:
     ll::event::ListenerPtr mServerCommandRegisterListener;
     ll::event::ListenerPtr mClientCommandRegisterListener;
+    ll::event::ListenerPtr mClientTickListener;
 };
 
 } // namespace no_cheat_tab_complete

@@ -8,7 +8,7 @@ option("target_type")
     set_values("client")
 option_end()
 
-add_requires("levilamina 26.51.9", {configs = {target_type = get_config("target_type") or "client"}})
+add_requires("levilamina 26.60.1", {configs = {target_type = get_config("target_type") or "client"}})
 
 add_requires("levibuildscript")
 
@@ -20,7 +20,7 @@ target("NoCheatTabComplete")
     add_rules("@levibuildscript/linkrule")
     add_rules("@levibuildscript/modpacker", {
         modName = "NoCheatTabComplete",
-        modVersion = "0.1.0"
+        modVersion = "1.0.0"
     })
     if is_plat("windows") then
         add_defines("NOMINMAX", "UNICODE", "_HAS_CXX23=1")
